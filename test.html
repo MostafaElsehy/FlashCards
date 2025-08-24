@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Flashcards</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin: 10px 0; }
+        label { display: block; margin-bottom: 5px; }
+        input { padding: 8px; width: 200px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .flashcard { border: 1px solid #ccc; padding: 20px; margin: 20px 0; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>Flashcard Test</h1>
+    
+    <form id="flashcardForm">
+        <div class="form-group">
+            <label for="word">English Word:</label>
+            <input type="text" id="word" required placeholder="Enter English word">
+        </div>
+        <div class="form-group">
+            <label for="meaning">Arabic Meaning:</label>
+            <input type="text" id="meaning" required placeholder="أدخل المعنى العربي">
+        </div>
+        <div class="form-group">
+            <label for="example">Example Sentence:</label>
+            <input type="text" id="example" required placeholder="Enter example sentence">
+        </div>
+        <button type="submit">Add Flashcard</button>
+    </form>
+    
+    <div id="flashcardDisplay">
+        <h2>Current Card:</h2>
+        <div class="flashcard">
+            <h3 id="cardWord">No cards yet</h3>
+            <p id="cardMeaning">Add some flashcards first!</p>
+            <p id="cardExample"></p>
+        </div>
+    </div>
+    
+    <div id="debug">
+        <h3>Debug Info:</h3>
+        <p id="debugInfo">Waiting for form submission...</p>
+    </div>
+
+    <script>
+        // Simple test version without ResponsiveVoice
+        let flashcards = [];
+        let currentCardIndex = 0;
+        
+        const flashcardForm = document.getElementById('flashcardForm');
+        const wordInput = document.getElementById('word');
+        const meaningInput = document.getElementById('meaning');
+        const exampleInput = document.getElementById('example');
+        const cardWord = document.getElementById('cardWord');
+        const cardMeaning = document.getElementById('cardMeaning');
+        const cardExample = document.getElementById('cardExample');
+        const debugInfo = document.getElementById('debugInfo');
+        
+        function updateDebug() {
+            debugInfo.textContent = `Cards: ${flashcards.length}, Current: ${currentCardIndex}`;
+        }
+        
+        function displayCurrentCard() {
+            if (flashcards.length === 0) {
+                cardWord.textContent = 'No cards yet';
+                cardMeaning.textContent = 'Add some flashcards first!';
+                cardExample.textContent = '';
+            } else {
+                const card = flashcards[currentCardIndex];
+                cardWord.textContent = card.word;
+                cardMeaning.textContent = card.meaning;
+                cardExample.textContent = card.example;
+            }
+            updateDebug();
+        }
+        
+        flashcardForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Form submitted!');
+            
+            const word = wordInput.value.trim();
+            const meaning = meaningInput.value.trim();
+            const example = exampleInput.value.trim();
+            
+            if (!word || !meaning || !example) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            const newCard = {
+                id: Date.now(),
+                word: word,
+                meaning: meaning,
+                example: example
+            };
+            
+            flashcards.push(newCard);
+            console.log('Card added:', newCard);
+            console.log('Total cards:', flashcards.length);
+            
+            // Reset form
+            flashcardForm.reset();
+            
+            // Display the current card
+            displayCurrentCard();
+            
+            alert('Flashcard added successfully!');
+        });
+        
+        // Initialize
+        displayCurrentCard();
+        console.log('Test page loaded');
+    </script>
+</body>
+</html>

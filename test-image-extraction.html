@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Image Extraction - Flashcards App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .test-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .test-section h3 {
+            margin-bottom: 15px;
+            color: #a29bfe;
+        }
+        
+        .test-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .instructions h4 {
+            color: #74b9ff;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .api-note {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .api-note h4 {
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+        
+        .api-note a {
+            color: #74b9ff;
+            text-decoration: none;
+        }
+        
+        .api-note a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Test Image Extraction Feature</h1>
+        
+        <div class="api-note">
+            <h4>⚠️ Important Note</h4>
+            <p>To test the image extraction feature, you need a <strong>Gemini API key</strong> from Google AI Studio.</p>
+            <p>Get your free API key from: <a href="https://makersuite.google.com/app/apikey" target="_blank">https://makersuite.google.com/app/apikey</a></p>
+        </div>
+        
+        <div class="test-section">
+            <h3>📋 How to Test</h3>
+            <div class="instructions">
+                <h4>Step-by-Step Instructions:</h4>
+                <ul>
+                    <li>1. Open the main app: <a href="index.html" class="btn btn-secondary">Open Flashcards App</a></li>
+                    <li>2. Scroll to the "Add New Flashcard" section</li>
+                    <li>3. Find the "Extract Words from Image" section</li>
+                    <li>4. Enter your Gemini API key</li>
+                    <li>5. Upload one of the test images below</li>
+                    <li>6. Click "Extract Words" and watch the magic happen!</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🖼️ Sample Test Images</h3>
+            <p>Here are some sample images you can use to test the feature. These images contain English-Arabic word pairs that the AI should be able to extract:</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <a href="https://via.placeholder.com/400x300/6c5ce7/ffffff?text=Sample+Image+1%0AHello+%3D+مرحبا%0AWorld+%3D+عالم%0ABook+%3D+كتاب" target="_blank" class="btn">
+                    📸 Sample Image 1
+                </a>
+                <a href="https://via.placeholder.com/400x300/667eea/ffffff?text=Sample+Image+2%0ACat+%3D+قط%0ADog+%3D+كلب%0AHouse+%3D+منزل" target="_blank" class="btn">
+                    📸 Sample Image 2
+                </a>
+                <a href="https://via.placeholder.com/400x300/764ba2/ffffff?text=Sample+Image+3%0AWater+%3D+ماء%0AFire+%3D+نار%0AEarth+%3D+أرض" target="_blank" class="btn">
+                    📸 Sample Image 3
+                </a>
+            </div>
+            
+            <p><strong>Note:</strong> These are placeholder images. For best results, create your own images with clear English-Arabic word pairs.</p>
+        </div>
+        
+        <div class="test-section">
+            <h3>🎯 Expected Results</h3>
+            <div class="instructions">
+                <h4>What the AI should extract:</h4>
+                <ul>
+                    <li>✅ English words and their Arabic translations</li>
+                    <li>✅ Realistic example sentences for each word</li>
+                    <li>✅ Proper JSON structure with IDs</li>
+                    <li>✅ Ability to select which words to add</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 Troubleshooting</h3>
+            <div class="instructions">
+                <h4>Common Issues:</h4>
+                <ul>
+                    <li><strong>API Key Error:</strong> Make sure your Gemini API key is correct and active</li>
+                    <li><strong>No Words Extracted:</strong> Try a clearer image with better text quality</li>
+                    <li><strong>File Size Error:</strong> Ensure image is under 10MB</li>
+                    <li><strong>Browser Issues:</strong> Try refreshing the page or using a different browser</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="index.html" class="btn" style="font-size: 18px; padding: 15px 30px;">
+                🚀 Start Testing Now
+            </a>
+        </div>
+    </div>
+</body>
+</html>

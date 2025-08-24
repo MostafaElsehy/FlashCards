@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#6c5ce7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Flashcards">
+    <meta name="description" content="Learn English-Arabic vocabulary with interactive flashcards and multiple practice modes">
+    
+    <title>English-Arabic Flashcards & Quiz</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16x16.png">
+    
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Using native Web Speech API instead of MeSpeak.js -->
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span class="icon">🌙</span>
+    </button>
+    
+    <div class="container">
+        <header>
+            <div class="app-logo">
+                <div class="logo-stack">
+                    <div class="logo-card logo-card-1"></div>
+                    <div class="logo-card logo-card-2"></div>
+                    <div class="logo-card logo-card-3"></div>
+                </div>
+            </div>
+            <h1>English-Arabic Flashcards & Quiz</h1>
+        </header>
+
+        <!-- Add Flashcard Form -->
+        <section class="form-section">
+            <h2>Add New Flashcard</h2>
+            <form id="flashcardForm">
+                <div class="form-group">
+                    <label for="word">English Word:</label>
+                    <input type="text" id="word" required placeholder="Enter English word">
+                </div>
+                <div class="form-group">
+                    <label for="meaning">Arabic Meaning:</label>
+                    <input type="text" id="meaning" required placeholder="أدخل المعنى العربي">
+                </div>
+                <div class="form-group">
+                    <label for="example">Example Sentence:</label>
+                    <input type="text" id="example" required placeholder="Enter example sentence">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Flashcard</button>
+            </form>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <h2>📊 Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Cards</h3>
+                    <p id="totalCards">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Quiz Score</h3>
+                    <p id="quizPercentage">0%</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Cards Studied</h3>
+                    <p id="cardsStudied">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Study Streak</h3>
+                    <p id="studyStreak">0 days</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flashcard Display -->
+        <section class="flashcard-section">
+            <h2>Flashcards</h2>
+            <div class="flashcard-controls-top">
+                <button id="shuffleMode" class="btn btn-outline">🔀 Shuffle Mode: OFF</button>
+                <button id="deleteCard" class="btn btn-danger" disabled>🗑️ Delete Card</button>
+            </div>
+            <div class="pronunciation-buttons">
+                <button id="speakAmerican" class="btn btn-speak btn-american" title="American Pronunciation">
+                    US
+                </button>
+                <button id="speakBritish" class="btn btn-speak btn-british" title="British Pronunciation">
+                    UK
+                </button>
+            </div>
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <h3 id="cardWord">No cards yet</h3>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3 id="cardMeaning">Add some flashcards first!</h3>
+                            <p id="cardExample"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flashcard-controls">
+                <button id="prevCard" class="btn btn-secondary" disabled>← Previous</button>
+                <span id="cardCounter">0 / 0</span>
+                <button id="nextCard" class="btn btn-secondary" disabled>Next →</button>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section class="quiz-section">
+            <h2>Practice Modes</h2>
+            
+            <!-- Practice Mode Selector -->
+            <div class="practice-mode-selector">
+                <button class="mode-btn active" data-mode="typing">✍️ Typing Quiz</button>
+                <button class="mode-btn" data-mode="multiple-choice">🎯 Multiple Choice</button>
+                <button class="mode-btn" data-mode="fill-blank">📝 Fill in the Blank</button>
+                <button class="mode-btn" data-mode="scramble">🔀 Word Scramble</button>
+                <button class="mode-btn" data-mode="listening">🎧 Listening Practice</button>
+            </div>
+
+            <!-- Typing Quiz Mode -->
+            <div class="practice-mode" id="typing-mode">
+                <div class="quiz-container">
+                    <div class="score-display">
+                        <span>Score: <span id="score">0 / 0</span></span>
+                        <button id="resetScore" class="btn btn-small">Reset Score</button>
+                    </div>
+                    
+                    <div id="quizQuestion" class="quiz-question">
+                        <p>Add some flashcards to start the quiz!</p>
+                    </div>
+                    
+                    <div class="quiz-input">
+                        <input type="text" id="quizAnswer" placeholder="Type your answer..." disabled>
+                        <button id="submitAnswer" class="btn btn-primary" disabled>Submit</button>
+                    </div>
+                    
+                    <div id="quizFeedback" class="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Multiple Choice Mode -->
+            <div class="practice-mode" id="multiple-choice-mode" style="display: none;">
+                <div class="quiz-container">
+                    <div class="score-display">
+                        <span>Score: <span id="mcScore">0 / 0</span></span>
+                        <button id="resetMCScore" class="btn btn-small">Reset Score</button>
+                    </div>
+                    
+                    <div id="mcQuestion" class="quiz-question">
+                        <p>Add some flashcards to start the quiz!</p>
+                    </div>
+                    
+                    <div class="multiple-choice-options" id="mcOptions">
+                        <!-- Options will be generated here -->
+                    </div>
+                    
+                    <div id="mcFeedback" class="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Fill in the Blank Mode -->
+            <div class="practice-mode" id="fill-blank-mode" style="display: none;">
+                <div class="quiz-container">
+                    <div class="score-display">
+                        <span>Score: <span id="fbScore">0 / 0</span></span>
+                        <button id="resetFBScore" class="btn btn-small">Reset Score</button>
+                    </div>
+                    
+                    <div id="fbQuestion" class="quiz-question">
+                        <p>Add some flashcards to start the quiz!</p>
+                    </div>
+                    
+                    <div class="quiz-input">
+                        <input type="text" id="fbAnswer" placeholder="Type your answer..." disabled>
+                        <button id="submitFBAnswer" class="btn btn-primary" disabled>Submit</button>
+                    </div>
+                    
+                    <div id="fbFeedback" class="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Word Scramble Mode -->
+            <div class="practice-mode" id="scramble-mode" style="display: none;">
+                <div class="quiz-container">
+                    <div class="score-display">
+                        <span>Score: <span id="scrambleScore">0 / 0</span></span>
+                        <button id="resetScrambleScore" class="btn btn-small">Reset Score</button>
+                    </div>
+                    
+                    <div id="scrambleQuestion" class="quiz-question">
+                        <p>Add some flashcards to start the quiz!</p>
+                    </div>
+                    
+                    <div class="scramble-display">
+                        <div id="scrambledWord" class="scrambled-word"></div>
+                    </div>
+                    
+                    <div class="quiz-input">
+                        <input type="text" id="scrambleAnswer" placeholder="Unscramble the word..." disabled>
+                        <button id="submitScrambleAnswer" class="btn btn-primary" disabled>Submit</button>
+                    </div>
+                    
+                    <div id="scrambleFeedback" class="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Listening Practice Mode -->
+            <div class="practice-mode" id="listening-mode" style="display: none;">
+                <div class="quiz-container">
+                    <div class="score-display">
+                        <span>Score: <span id="listeningScore">0 / 0</span></span>
+                        <button id="resetListeningScore" class="btn btn-small">Reset Score</button>
+                    </div>
+                    
+                    <div id="listeningQuestion" class="quiz-question">
+                        <p>Add some flashcards to start the quiz!</p>
+                    </div>
+                    
+                    <div class="listening-controls">
+                                        <button id="playWord" class="btn btn-secondary" disabled>🔊 Play Word</button>
+                    </div>
+                    
+                    <div class="quiz-input">
+                        <input type="text" id="listeningAnswer" placeholder="Type what you hear..." disabled>
+                        <button id="submitListeningAnswer" class="btn btn-primary" disabled>Submit</button>
+                    </div>
+                    
+                    <div id="listeningFeedback" class="quiz-feedback"></div>
+                </div>
+            </div>
+
+
+        </section>
+
+        <!-- Export/Import Section -->
+        <section class="export-section">
+            <h2>💾 Data Management</h2>
+            <div class="export-controls">
+                <button id="exportData" class="btn btn-outline">📤 Export Flashcards</button>
+                <button id="importData" class="btn btn-outline">📥 Import Flashcards</button>
+                <button id="importImage" class="btn btn-outline">🖼️ Import Image</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;">
+                <input type="file" id="importImageFile" accept="image/*" style="display: none;">
+                <button id="clearAllData" class="btn btn-danger">🗑️ Clear All Data</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- PWA Install Prompt -->
+    <div id="installPrompt" class="install-prompt">
+        <span>Install this app for a better experience!</span>
+        <button id="installBtn">Install</button>
+        <button class="close" id="closeInstallPrompt">✕</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
